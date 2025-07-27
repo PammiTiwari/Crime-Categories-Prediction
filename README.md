@@ -65,6 +65,6 @@ The dataset consists of three files:
 
 ## Results
 
-The final model achieved an accuracy score of **0.91600** on the test dataset.
+The final model achieved an accuracy score of **0.92275** on the test dataset.
 
-This result placed me at **Rank 9** on the public leaderboard. The model performed well across major crime categories and generalized effectively across both frequent and rare classes.
+This result placed me at **Rank 14** on the public leaderboard. The model performed well across major crime categories and generalized effectively across both frequent and rare classes.
