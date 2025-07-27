@@ -1,60 +1,70 @@
-# Recipe for Rating: Predict Food Ratings using ML
+# CrimeCast: Predict Crime Categories using Machine Learning
 
 ## Overview
 
-"Recipe for Rating" is a machine learning challenge where participants aim to predict how people rate recipes based on available data. The dataset includes recipe names, reviews, and several other features that serve as the foundation for developing predictive models.
+CrimeCast is a machine learning challenge where participants aim to predict the type of crime based on various incident-level features. The dataset includes temporal, geographical, and demographic information that forms the basis for building predictive models.
 
 ## Objective
 
-The primary objective is to develop a machine learning model that can accurately predict the rating of recipes based on various features.
+The primary objective is to develop a machine learning model that can accurately predict the **crime category** based on features such as time, location, victim details, and crime context.
 
 ## Dataset
 
 The dataset consists of three files:
-- **train.csv**: Contains the training data with recipe details and ratings.
-- **test.csv**: Contains the test data where ratings need to be predicted.
-- **sample.csv**: A sample submission file.
+- **train.csv**: Contains the training data with crime details and labeled categories.
+- **test.csv**: Contains the test data where crime categories need to be predicted.
+- **sample_submission.csv**: A sample submission format.
 
 ### Key Features
-- **Recipe Name**: The name or title of the recipe.
-- **Reviews**: User reviews associated with each recipe.
-- **Additional Features**: Other features such as the ingredients and preparation steps, which may also affect the ratings.
+- **Date & Time**: When the crime occurred.
+- **Location**: Including latitude, longitude, area ID, and location description.
+- **Victim Details**: Age, gender, and descent.
+- **Crime Context**: Weapon used, modus operandi, and premise description.
+- **Target**: `Crime_Category` (the crime type to be predicted).
 
 ## Approach
 
 ### 1. Data Loading and Exploration
-   - Loaded the dataset and conducted basic exploratory data analysis (EDA).
-   - Examined the distribution of ratings, feature correlations, and data quality (e.g., handling missing values).
+   - Loaded the dataset and performed exploratory data analysis (EDA).
+   - Explored distribution of crime categories, time patterns, and area-wise hotspots.
 
 ### 2. Data Preprocessing
-   - **Text Preprocessing**: Cleaned the reviews by removing unwanted characters, stopwords, and applying tokenization.
-   - **Feature Extraction**: Used **TF-IDF Vectorization** and **Count Vectorization** to convert text features into numerical form.
-   - **Label Encoding**: Categorical variables such as recipe types were encoded into numerical labels.
-   - **Train-Test Split**: Split the dataset into training and validation sets to ensure model evaluation.
+   - **Datetime Features**: Extracted hour, day, weekday, and month from date and time fields.
+   - **Categorical Encoding**: Applied Label Encoding and One-Hot Encoding to categorical variables.
+   - **Missing Value Handling**: Used imputation or "Unknown" tagging for incomplete fields.
+   - **Standardization**: Normalized numerical features like victim age.
 
-### 3. Model Building
-   Several machine learning models were tried and tested to predict food ratings:
+### 3. Feature Engineering
+   - Created derived features such as:
+     - `is_night_time`
+     - `is_weekend`
+     - `weapon_used` (binary)
+     - `location_cluster` (using latitude & longitude)
+   - Combined rare categories and reduced high-cardinality fields for model simplicity.
+
+### 4. Model Building
+   Multiple models were tested to predict crime categories:
    - **Logistic Regression**
-   - **Random Forest Classifier**
-   - **Naive Bayes**
-   - **Gradient Boosting Classifier**
-   - **Support Vector Machines (SVM)**
+   - **Random Forest**
+   - **XGBoost**
+   - **LightGBM**
    - **Multilayer Perceptron (MLP)**
+   - **Support Vector Machine (SVM)**
 
-   **Stacking Classifier** was also implemented, combining different models to improve predictive performance.
+   Additionally, an **Ensemble Stacking Classifier** was used to combine model outputs for improved performance.
 
-### 4. Model Tuning
-   - **Hyperparameter Tuning**: Used `GridSearchCV` for model selection and fine-tuning of hyperparameters to optimize the performance of the models.
-   - **Feature Selection**: Applied statistical methods like `chi2` to select the most important features for model training.
+### 5. Model Tuning
+   - **Hyperparameter Tuning**: Applied `GridSearchCV` and `RandomizedSearchCV` for optimal performance.
+   - **Feature Importance Analysis**: Used feature selection techniques to reduce noise and overfitting.
 
-### 5. Evaluation
+### 6. Evaluation
    The models were evaluated using:
-   - **Accuracy Score**: The main metric used for model evaluation in this competition.
-   - **Confusion Matrix**: To evaluate model performance on individual classes.
-   - **F1 Score**: For a balance between precision and recall, particularly important in cases of class imbalance.
-
-   After several experiments, **Random Forest** and **Gradient Boosting** provided the best results in terms of accuracy and generalization across the dataset.
+   - **Accuracy Score**: Main metric used in the competition.
+   - **F1 Score**: To balance performance across all crime categories.
+   - **Confusion Matrix**: To assess class-wise prediction capability.
 
 ## Results
 
-The final model achieved an accuracy score of **0.78156** (highest was 0.80444) on the test dataset . Additionally, the confusion matrix showed strong performance in predicting the higher ratings, with slight underperformance in distinguishing between lower ratings.
+The final model achieved an accuracy score of **0.91600** on the test dataset.
+
+This result placed me at **Rank 9** on the public leaderboard. The model performed well across major crime categories and generalized effectively across both frequent and rare classes.
